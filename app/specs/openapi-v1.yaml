@@ -1,0 +1,387 @@
+openapi: 3.0.0
+info:
+  description: "This is a sample server Todo server."
+  version: "1.0.0"
+  title: "Todo"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "todo.develop.io"
+    description: Development server
+  - url: "todo.product.io"
+    description: Production server
+tags:
+- name: "task"
+  description: "Everything about your Task"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+security:
+  - BearerAuth: []
+paths:
+  /ping:
+    get:
+      operationId: default.ping
+      security: []
+      responses:
+        "200":
+          description: Ping success
+        "400":
+          description: Ping failure
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /login:
+    post:
+      operationId: users.login
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    minLength: 32
+                    maxLength: 32
+                  refresh_token:
+                    type: string
+                    minLength: 32
+                    maxLength: 32
+        "400":
+          description: Login failure
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "username or password is wrong"
+  /users:
+    post:
+      tags:
+      - user
+      operationId: users.create_user
+      security: []
+      summary: Register new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - fullname
+              - username
+              - password
+              properties:
+                fullname:
+                  type: string
+                  minLength: 8
+                  maxLength: 50
+                username:
+                  type: string
+                  minLength: 8
+                  maxLength: 16
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 16
+      responses:
+        "201":
+          description: "Create user success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int32
+                    minimum: 1
+          links:
+            GetUserById:
+              operationId: users.get_user
+              parameters:
+                user_id: '$response.body#/id'
+  /users/{user_id}:
+    get:
+      tags:
+      - user
+      operationId: users.get_user
+      parameters:
+      - in: path
+        required: true
+        name: user_id
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fullname:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+  /tasks:
+    get:
+      tags:
+      - task
+      summary: Get task list
+      operationId: tasks.get_tasks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_item:
+                    type: integer
+                  page:
+                    type: integer
+                  page_size:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        status:
+                          type: string
+                          enum:
+                          - new
+                          - doing
+                          - done
+                          - failure
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+    post:
+      tags:
+      - task
+      summary: Create new task
+      operationId: tasks.create_task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - title
+              - description
+              properties:
+                title:
+                  type: string
+                  minLength: 5
+                  maxLength: 50
+                description:
+                  type: string
+                  nullable: true
+                  maxLength: 255
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+          links:
+            GetTaskById:
+              operationId: tasks.get_task
+              parameters:
+                task_id: '$response.body#/id'
+        "400":
+          description: "Create failure"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Title existed"
+  /tasks/{task_id}:
+    get:
+      tags:
+      - task
+      operationId: tasks.get_task
+      parameters:
+      - in: path
+        name: task_id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                    - new
+                    - doing
+                    - done
+                    - failure
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+    patch:
+      tags:
+      - task
+      summary: Update task
+      operationId: tasks.update_task
+      parameters:
+      - in: path
+        name: task_id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  minLength: 5
+                  maxLength: 50
+                description:
+                  type: string
+                  nullable: true
+                  maxLength: 255
+                status:
+                  type: string
+                  enum:
+                  - new
+                  - doing
+                  - done
+                  - failure
+      responses:
+        "202":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                    - new
+                    - doing
+                    - done
+                    - failure
+        "400":
+          description: "Update failure"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Task not found"
+    delete:
+      tags:
+      - task
+      summary: Delete task
+      operationId: tasks.delete_task
+      parameters:
+      - in: path
+        name: task_id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "202":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        "400":
+          description: "Delete failure"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Task not found"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: app.auth.decode_token
