@@ -17,7 +17,7 @@ class Task(models.Base):
     title = Column(types.String(50), nullable=False)
     description = Column(types.String(255))
     status = Column(types.String(20), nullable=False, default='new')
-    created_by = Column(types.String(), ForeignKey('users.username'),
+    created_by = Column(types.String(50), ForeignKey('users.username'),
                         nullable=False)
     owner = relationship('User', backref='tasks')
     created_at = Column(types.TIMESTAMP, default=func.now())

@@ -1,0 +1,112 @@
+version: "3.7"
+
+services:
+  web:
+    image: nguyenkhacthanh/flask-webservice:latest
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASS=password
+      - DB_NAME=app
+      - DB_DRIVE=mysql+pymysql
+      - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
+      - SLACK_BOT_TOKEN=xoxb-1064441476484-1057682739635-wknrUQeqPY9CkWleVlZh7rFl
+      - SLACK_LOG_CHANNEL_ID=C011WCZE3EG
+      - COMMAND=alembic upgrade head && gunicorn -c gunicorn.config.py wsgi:application
+    ports:
+      - 8000:80
+    depends_on:
+      - mysql
+      - rabbitmq
+    networks:
+      - mynet
+  worker:
+    build:
+      context: .
+      dockerfile: worker.dockerfile
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASS=password
+      - DB_NAME=app
+      - DB_DRIVE=mysql+pymysql
+      - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
+      - CELERY_RESULT_PERSISTENT=1
+    depends_on:
+      - rabbitmq
+      - mysql
+      - rabbitmq
+    restart: on-failure
+    networks:
+      - mynet
+  worker:
+    image: nguyenkhacthanh/flask-webservice:latest
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASS=password
+      - DB_NAME=app
+      - DB_DRIVE=mysql+pymysql
+      - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
+      - CELERY_RESULT_PERSISTENT=1
+      - COMMAND=celery -A app.jobs.manager worker -l info
+    depends_on:
+      - rabbitmq
+      - mysql
+    restart: on-failure
+    networks:
+      - mynet
+  flower:
+    image: nguyenkhacthanh/flask-webservice:latest
+    environment:
+      - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
+      - BROKER_API=http://root:password@rabbitmq:15672/api/
+      - COMMAND=celery -A app.jobs.manager flower --address=0.0.0.0 --port=5555 --broker_api=$${BROKER_API}
+    ports:
+      - 5555:5555
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    networks:
+      - mynet
+  flower:
+    build:
+      context: .
+      dockerfile: flower.dockerfile
+    environment:
+      - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
+      - BROKER_API=http://root:password@rabbitmq:15672/api/
+    ports:
+      - 5555:5555
+    depends_on:
+      - rabbitmq
+    networks:
+      - mynet
+  mysql:
+    image: mysql:5.5.61
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=app
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    restart: on-failure
+    networks:
+      - mynet
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_DEFAULT_VHOST=celery
+    expose:
+      - 5672
+      - 15672
+    ports:
+      - 15672:15672
+    restart: on-failure
+    networks:
+      - mynet
+networks:
+  mynet:
