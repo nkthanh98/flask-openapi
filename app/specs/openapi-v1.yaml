@@ -32,20 +32,11 @@ paths:
       operationId: default.ping
       security: []
       responses:
-        "200":
-          description: Ping success
-        "400":
-          description: Ping failure
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+        "204":
+          description: No content
   /login:
     post:
-      operationId: users.login
+      operationId: user.login
       security: []
       requestBody:
         content:
@@ -86,11 +77,17 @@ paths:
                   message:
                     type: string
                     example: "username or password is wrong"
+  /logout:
+    post:
+      operationId: user.logout
+      responses:
+        "204":
+          description: No content
   /users:
     post:
       tags:
       - user
-      operationId: users.create_user
+      operationId: user.create_user
       security: []
       summary: Register new user
       requestBody:
@@ -129,14 +126,24 @@ paths:
                     minimum: 1
           links:
             GetUserById:
-              operationId: users.get_user
+              operationId: user.get_user
               parameters:
                 user_id: '$response.body#/id'
+        "400":
+          description: Create user failure
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "username existed"
   /users/{user_id}:
     get:
       tags:
       - user
-      operationId: users.get_user
+      operationId: user.get_user
       parameters:
       - in: path
         required: true
@@ -159,12 +166,22 @@ paths:
                   updated_at:
                     type: string
                     format: date-time
+        "400":
+          description: User not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not exist
   /tasks:
     get:
       tags:
       - task
       summary: Get task list
-      operationId: tasks.get_tasks
+      operationId: task.get_tasks
       responses:
         "200":
           description: OK
@@ -201,11 +218,21 @@ paths:
                         updated_at:
                           type: string
                           format: date-time
+        "400":
+          description: Failure
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Task not exist
     post:
       tags:
       - task
       summary: Create new task
-      operationId: tasks.create_task
+      operationId: task.create_task
       requestBody:
         content:
           application/json:
@@ -213,7 +240,6 @@ paths:
               type: object
               required:
               - title
-              - description
               properties:
                 title:
                   type: string
@@ -235,7 +261,7 @@ paths:
                     type: integer
           links:
             GetTaskById:
-              operationId: tasks.get_task
+              operationId: task.get_task
               parameters:
                 task_id: '$response.body#/id'
         "400":
@@ -252,7 +278,7 @@ paths:
     get:
       tags:
       - task
-      operationId: tasks.get_task
+      operationId: task.get_task
       parameters:
       - in: path
         name: task_id
@@ -288,7 +314,7 @@ paths:
       tags:
       - task
       summary: Update task
-      operationId: tasks.update_task
+      operationId: task.update_task
       parameters:
       - in: path
         name: task_id
@@ -317,26 +343,8 @@ paths:
                   - done
                   - failure
       responses:
-        "202":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  title:
-                    type: string
-                  description:
-                    type: string
-                  status:
-                    type: string
-                    enum:
-                    - new
-                    - doing
-                    - done
-                    - failure
+        "204":
+          description: No content
         "400":
           description: "Update failure"
           content:
@@ -351,7 +359,7 @@ paths:
       tags:
       - task
       summary: Delete task
-      operationId: tasks.delete_task
+      operationId: task.delete_task
       parameters:
       - in: path
         name: task_id
@@ -359,15 +367,8 @@ paths:
         schema:
           type: integer
       responses:
-        "202":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
+        "204":
+          description: No content
         "400":
           description: "Delete failure"
           content:
@@ -384,4 +385,4 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      x-bearerInfoFunc: app.auth.decode_token
+      x-bearerInfoFunc: app.auth.auth_fn

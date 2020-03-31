@@ -19,12 +19,17 @@ class User(models.Base):
     fullname = Column(types.String(50), nullable=False)
     username = Column(types.String(50), nullable=False, unique=True, index=True)
     password_hash = Column(types.String(128), nullable=False)
+    is_active = Column(types.Boolean(), default=False, nullable=False)
     created_at = Column(types.TIMESTAMP, default=func.now())
     updated_at = Column(types.TIMESTAMP, onupdate=func.now())
 
     @property
     def password(self):
         raise ValueError('This is a only read attribute')
+
+    @password.getter
+    def password(self):
+        return self.password_hash
 
     @password.setter
     def password(self, raw_password):

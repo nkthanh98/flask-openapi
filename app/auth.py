@@ -3,15 +3,20 @@
 """
 
 from datetime import datetime
+from functools import partial
 import six
 from werkzeug.exceptions import Unauthorized
 from connexion import context
 from jose import jwt
 from app import config
-from app import models
+from app import repos
 
 
-def decode_token(access_token):
+def set_current_user(user):
+    context['current_user'] = user
+
+
+def decode_token(access_token, callback=None):
     """Decode JWT token for secure api
 
     :param access_token:
@@ -25,15 +30,14 @@ def decode_token(access_token):
         time_delta = datetime.now().timestamp() - payload.get('timestamp', 0)
         if time_delta > config.LOGIN_TIME_ALIVE:
             raise Unauthorized('Login time to expired')
-        user = models.session.query(models.User).filter(        # pylint: disable=E1101
-            models.User.username == payload.get('data')['username']
-        ).first()
-        if not user:
+        user = repos.get_user_by_username(payload['data']['username'])
+        if not user or not user.is_active:
             raise Unauthorized()
-        context['current_user'] = user
     except jwt.JWTError as decode_error:
         six.raise_from(Unauthorized, decode_error)
     else:
+        if callback:
+            callback(user)
         return payload
 
 
@@ -47,3 +51,6 @@ def generate_access_token(data):        # pylint: disable=C0116
         key=config.JWT_KEY,
         algorithm=config.JWT_ALGORITHM
     )
+
+
+auth_fn = partial(decode_token, callback=set_current_user)

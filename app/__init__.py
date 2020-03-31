@@ -6,6 +6,8 @@ from connexion import (
 )
 from . import config
 from . import models
+from . import utils
+from . import repos
 
 
 class VersionResolver(Resolver):
@@ -14,17 +16,23 @@ class VersionResolver(Resolver):
         self._prefix = prefix
 
     def resolve_operation_id(self, operation):
-        return '{}.{}'.format(self._prefix, operation.operation_id)
+        return f'{self._prefix}.{operation.operation_id}'
 
 
 def create_app():
-    app = FlaskApp(__name__, specification_dir='specs')
+    application = FlaskApp(__name__, specification_dir='specs')
 
-    app.add_api(
+    application.add_api(
         specification='openapi-v1.yaml',
         base_path='/v1',
         resolver=VersionResolver('app.apis.v1'),
         strict_validation=True
     )
 
-    return app
+    models.init_db()
+    if config.ENVIRONMENT == 'production':
+        def shutdown_session(exception):
+            models.session.remove()
+        application.app.teardown_appcontext(shutdown_session)
+
+    return application
