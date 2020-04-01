@@ -1,10 +1,8 @@
 lint:
-	pylint-fail-under --fail_under 9.5 app
+	PYTHONPATH=. pylint-fail-under --fail_under 9.5 app
 
 test:
-	@export PYTHONPATH=$(pwd)
-	@export ENVIRONMENT=testing
-	@pytest
+	ENVIRONMENT=testing pytest
 
 serve:
 	gunicorn wsgi:application --bind "0.0.0.0:80" --worker-class gevent
