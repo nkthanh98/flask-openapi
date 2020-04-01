@@ -107,7 +107,7 @@ paths:
                 username:
                   type: string
                   minLength: 8
-                  maxLength: 16
+                  maxLength: 30
                 password:
                   type: string
                   minLength: 8
@@ -124,11 +124,6 @@ paths:
                     type: integer
                     format: int32
                     minimum: 1
-          links:
-            GetUserById:
-              operationId: user.get_user
-              parameters:
-                user_id: '$response.body#/id'
         "400":
           description: Create user failure
           content:
@@ -139,17 +134,11 @@ paths:
                   message:
                     type: string
                     example: "username existed"
-  /users/{user_id}:
+  /users/info:
     get:
       tags:
       - user
-      operationId: user.get_user
-      parameters:
-      - in: path
-        required: true
-        name: user_id
-        schema:
-          type: string
+      operationId: user.get_user_info
       responses:
         "200":
           description: "OK"
@@ -310,6 +299,10 @@ paths:
                   updated_at:
                     type: string
                     format: date-time
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
     patch:
       tags:
       - task

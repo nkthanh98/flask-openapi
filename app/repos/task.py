@@ -25,7 +25,7 @@ def create_task(title, created_by, description=None, status='new'):
 
 
 def get_task_by_id(task_id):
-    return models.Task.query.get(task_id).one_or_none()
+    return models.session.query(models.Task).get(task_id)
 
 
 def update_task(task_id_or_task, data):

@@ -27,10 +27,7 @@ def decode_token(access_token, callback=None):
             key=config.JWT_KEY,
             algorithms=config.JWT_ALGORITHM
         )
-        time_delta = datetime.now().timestamp() - payload.get('timestamp', 0)
-        if time_delta > config.LOGIN_TIME_ALIVE:
-            raise Unauthorized('Login time to expired')
-        user = repos.get_user_by_username(payload['data']['username'])
+        user = repos.get_user_by_username(payload['sub'])
         if not user or not user.is_active:
             raise Unauthorized()
     except jwt.JWTError as decode_error:
@@ -41,10 +38,17 @@ def decode_token(access_token, callback=None):
         return payload
 
 
-def generate_access_token(data):        # pylint: disable=C0116
+def _get_timestamp():
+    return datetime.now().timestamp()
+
+
+def generate_access_token(identifier):        # pylint: disable=C0116
+    timestamp = _get_timestamp()
     payload = {
-        'data': data,
-        'timestamp': datetime.now().timestamp()
+        'sub': identifier,
+        'iss': config.ISSUE_MAINTAINER,
+        'iat': int(timestamp),
+        'exp': int(timestamp + config.LOGIN_TIME_ALIVE)
     }
     return jwt.encode(
         claims=payload,

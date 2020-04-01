@@ -20,3 +20,6 @@ DATABASE_CREDENTIALS = {
     'port': os.getenv('DB_PORT', None),
     'database': os.getenv('DB_NAME', ':memory:')
 }
+
+
+ISSUE_MAINTAINER = os.getenv('ISSUE_MAINTAINER', 'nkthanh.uet@gmail.com')

@@ -6,5 +6,8 @@ test:
 	@export ENVIRONMENT=testing
 	@pytest
 
+serve:
+	gunicorn wsgi:application --bind "0.0.0.0:80" --worker-class gevent
+
 clean:
 	@rm -rf coverage.xml .coverage htmlcov

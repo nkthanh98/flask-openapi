@@ -12,10 +12,8 @@ from app import repos
 from . import user_schema
 
 
-def get_user(user_id):
-    user = repos.get_user_by_id(user_id)
-    if not user:
-        raise BadRequest('User not exist')
+def get_user_info(user):
+    user = repos.get_user_by_username(user)
     return utils.dump(user_schema.User, user)
 
 
@@ -44,7 +42,7 @@ def login():
     }
 
 
-def logout():
-    user = context['current_user']
+def logout(user):
+    user = repos.get_user_by_username(user)
     repos.update_user(user, {'is_active': False})
     return NoContent

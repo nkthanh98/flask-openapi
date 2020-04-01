@@ -1,0 +1,7 @@
+# Ignore everything
+
+**
+
+!./app/**
+!./wsgi.py
+!./requirements.txt
