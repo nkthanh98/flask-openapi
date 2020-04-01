@@ -29,7 +29,7 @@ def create_app():
         strict_validation=True
     )
 
-    models.init_db()
+    models.init_db(config.DATABASE_DRIVE, config.DATABASE_CREDENTIALS)
     if config.ENVIRONMENT == 'production':
         def shutdown_session(exception):
             models.session.remove()

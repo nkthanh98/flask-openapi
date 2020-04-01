@@ -19,9 +19,9 @@ session = scoped_session(sessionmaker(      #pylint: disable=C0103
 ))
 
 
-def init_db():
+def init_db(drive, credentials):
     engine = create_engine(         # pylint: disable=C0103
-        URL(config.DATABASE_DRIVE, **config.DATABASE_CREDENTIALS),
+        URL(drive, **credentials),
         convert_unicode=True,
         echo=True
     )
