@@ -4,6 +4,7 @@ from connexion import (
     FlaskApp,
     Resolver,
 )
+from flask_cors import CORS
 from . import config
 from . import models
 from . import utils
@@ -34,5 +35,6 @@ def create_app():
         def shutdown_session(exception):
             models.session.remove()
         application.app.teardown_appcontext(shutdown_session)
+    CORS(application.app)
 
     return application
