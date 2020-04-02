@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=app
+      - DB_PASS=secret
+      - DB_NAME=app
+      - DB_DRIVE=mysql+pymysql
+    ports:
+      - "8000:80"
+    depends_on:
+      - mysql
+    networks:
+      - mynet
+  mysql:
+    image: mysql:5.5.61
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=app
+    expose:
+      - 3306
+    ports:
+      - "3306:3306"
+    networks:
+      - mynet
+networks:
+  mynet:

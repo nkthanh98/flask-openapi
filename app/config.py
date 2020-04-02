@@ -3,7 +3,7 @@
 import os
 
 
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'PRODUCTION')
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'production')
 
 JWT_ALGORITHM = 'HS256'
 
@@ -11,7 +11,7 @@ JWT_KEY = os.getenv('JWT_KEY', 'secret')
 
 LOGIN_TIME_ALIVE = int(os.getenv('LOGIN_TIME_ALIVE', str(60 * 60 * 24)))      # 1 day
 
-DATABASE_DRIVE = 'sqlite'
+DATABASE_DRIVE = os.getenv('DB_DRIVE', 'sqlite')
 
 DATABASE_CREDENTIALS = {
     'username': os.getenv('DB_USER', None),
