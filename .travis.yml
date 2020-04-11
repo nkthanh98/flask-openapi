@@ -6,14 +6,13 @@ python:
 install:
   - pip install -r ./requirements-test.txt
 
-script:
-  - make test
-  - make lint
+jobs:
+  include:
+    - stage: "Test"
+      name: "Unit test"
+      script: make test
+    - name: "Linter checking"
+      script: make lint
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
-
-branches:
-  only:
-    - master
-    - dev
