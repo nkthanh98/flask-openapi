@@ -8,9 +8,9 @@ jobs:
     executor: python/default
     steps:
       - checkout
-      - run:
-          command: pip install -r requirements-test.txt
-          name: Install dependencies
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - run:
           command: make test
           name: Test
