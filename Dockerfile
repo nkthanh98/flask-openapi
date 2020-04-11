@@ -1,5 +1,7 @@
 FROM python:3.7-alpine
 
+MAINTAINER nguyenkhacthanh244@gmail.com
+
 WORKDIR /app
 
 RUN apk update && apk add --no-cache gcc musl-dev libffi-dev openssl-dev
