@@ -9,6 +9,7 @@ from . import config
 from . import models
 from . import utils
 from . import repos
+from . import jobs
 
 
 class VersionResolver(Resolver):
@@ -25,7 +26,6 @@ def create_app():
 
     application.add_api(
         specification='openapi-v1.yaml',
-        # base_path='/v1',
         resolver=VersionResolver('app.apis.v1.handlers'),
         strict_validation=True,
         validate_responses=True

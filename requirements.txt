@@ -6,3 +6,4 @@ gevent==1.4.0
 marshmallow==3.3.0
 pymysql==0.9.3
 flask-cors==3.0.8
+celery==4.4.2
