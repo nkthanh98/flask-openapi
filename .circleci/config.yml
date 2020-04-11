@@ -7,6 +7,10 @@ jobs:
   test:
     executor: python/default
     steps:
+      - checkout
+      - run:
+          command: pip install -r requirements-test.txt
+          name: Install dependencies
       - run:
           command: make test
           name: Test
