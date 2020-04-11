@@ -56,8 +56,10 @@ def get_tasks_with_filters(filters, page=1, per_page=10):
         query = query.filter(
             models.Task.status == filters.status
         )
+
+    total_item = query.count()
     query = query.offset((page - 1) * per_page).limit(per_page)
-    return query
+    return query, total_item
 
 
 def delete_task(task_id_or_task):

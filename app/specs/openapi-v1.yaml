@@ -9,9 +9,7 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 servers:
-  - url: "todo.develop.io"
-    description: Development server
-  - url: "todo.product.io"
+  - url: "/v1"
     description: Production server
 tags:
 - name: "task"
@@ -61,12 +59,8 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    minLength: 32
-                    maxLength: 32
                   refresh_token:
                     type: string
-                    minLength: 32
-                    maxLength: 32
         "400":
           description: Login failure
           content:
@@ -147,6 +141,10 @@ paths:
               schema:
                 type: object
                 properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
                   fullname:
                     type: string
                   created_at:
@@ -155,6 +153,7 @@ paths:
                   updated_at:
                     type: string
                     format: date-time
+                    nullable: true
         "400":
           description: User not exist
           content:
@@ -171,6 +170,15 @@ paths:
       - task
       summary: Get task list
       operationId: task.get_tasks
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+      - in: query
+        name: page_size
+        schema:
+          type: integer
       responses:
         "200":
           description: OK
@@ -286,6 +294,7 @@ paths:
                     type: string
                   description:
                     type: string
+                    nullable: true
                   status:
                     type: string
                     enum:

@@ -3,7 +3,7 @@
 import os
 
 
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'production')
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'testing')
 
 JWT_ALGORITHM = 'HS256'
 

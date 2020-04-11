@@ -8,7 +8,7 @@ from werkzeug.exceptions import BadRequest
 from app import auth
 from app import utils
 from app import repos
-from . import user_schema
+from ..schemas import user as user_schema
 
 
 def get_user_info(user):

@@ -25,9 +25,10 @@ def create_app():
 
     application.add_api(
         specification='openapi-v1.yaml',
-        base_path='/v1',
-        resolver=VersionResolver('app.apis.v1'),
-        strict_validation=True
+        # base_path='/v1',
+        resolver=VersionResolver('app.apis.v1.handlers'),
+        strict_validation=True,
+        validate_responses=True
     )
 
     models.init_db(config.DATABASE_DRIVE, config.DATABASE_CREDENTIALS)

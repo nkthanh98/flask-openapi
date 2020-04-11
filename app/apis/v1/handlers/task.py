@@ -9,7 +9,7 @@ from app import (
     repos,
     utils,
 )
-from . import task_schema
+from ..schemas import task as task_schema
 
 
 def create_task(user):
@@ -34,10 +34,17 @@ def get_task(task_id, user):
 
 
 def get_tasks(user):
-    tasks = repos.get_tasks_with_filters({
+    page = request.args.get('page', 1)
+    page_size = request.args.get('page_size', 10)
+    tasks, total_item = repos.get_tasks_with_filters({
         'created_by': user
-    })
-    return utils.dump(task_schema.Task, tasks, many=True)
+    }, page, page_size)
+    return {
+        'items': utils.dump(task_schema.Task, tasks, many=True),
+        'total_item': total_item,
+        'page': page,
+        'page_size': page_size
+    }
 
 def update_task(task_id, user):
     task = repos.get_task_by_id(task_id)

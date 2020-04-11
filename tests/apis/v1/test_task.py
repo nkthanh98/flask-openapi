@@ -219,7 +219,7 @@ def test_get_tasks(client):
     url = f'/v1/tasks'
     res = client.get(url, headers={'Authorization': f'Bearer {access_token}'})
     assert res.status_code == 200, res.get_json()['detail']
-    task_list_resp = sorted(res.get_json(), key=lambda x: x['id'])
+    task_list_resp = sorted(res.get_json()['items'], key=lambda x: x['id'])
     assert len(tasks) == len(task_list_resp)
     for task, task_resp in zip(tasks, task_list_resp):
         assert task.title == task_resp['title']
