@@ -8,22 +8,6 @@ from app import (
 
 
 @pytest.fixture
-def app():
-    _app = create_app()
-    ctx = _app.app.app_context()
-    ctx.push()
-    yield _app.app
-    ctx.pop()
-
-
-@pytest.fixture
-@pytest.mark.usefixtures('app')
-def app_class(request, app):
-    if request.cls is not None:
-        request.cls.app = app
-
-
-@pytest.fixture
 def db():
     models.init_db(
         drive='sqlite',
@@ -32,3 +16,12 @@ def db():
         }
     )
     yield models.session
+
+
+@pytest.fixture
+def client(request):
+    _app = create_app()
+    with _app.app.test_client() as client:
+        if request.cls is not None:
+            request.cls.client = client
+        yield client

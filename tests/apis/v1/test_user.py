@@ -124,9 +124,9 @@ class CreateUserTestCase(APITestCase):
     def setUp(self):
         super().setUp()
         self.data = {
-            'username': faker.text(16),
-            'password': faker.text(16),
-            'fullname': faker.text(20)
+            'username': faker.lexify('?'*16),
+            'password': faker.lexify('?'*16),
+            'fullname': faker.lexify('?'*16)
         }
 
     @staticmethod

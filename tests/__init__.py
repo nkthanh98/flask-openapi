@@ -6,6 +6,7 @@ from faker import (
     Factory,
     Faker,
 )
+from flask.testing import FlaskClient
 
 
 faker = Factory.create()
@@ -15,9 +16,9 @@ class BaseTestCase(unittest.TestCase):
     KEY: str = None
 
 
-@pytest.mark.usefixtures('app_class')
+@pytest.mark.usefixtures('client')
 class APITestCase(BaseTestCase):
-    app = None
+    client: FlaskClient = None
 
     @staticmethod
     def url():
@@ -31,7 +32,7 @@ class APITestCase(BaseTestCase):
         method = (method or self.method()).lower()
         url = url or self.url()
         assert method in ('get', 'put', 'patch', 'post', 'delete'), f'{method} not support'
-        caller = getattr(self.app.test_client(), method)
+        caller = getattr(self.client, method)
         if method == 'get':
             resp = caller(url, headers=headers)
         else:
