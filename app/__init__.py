@@ -9,6 +9,7 @@ from . import config
 from . import models
 from . import utils
 from . import repos
+from . import services
 from . import jobs
 
 
@@ -23,6 +24,7 @@ class VersionResolver(Resolver):
 
 def create_app():
     application = FlaskApp(__name__, specification_dir='specs')
+    CORS(application.app)
 
     application.add_api(
         specification='openapi-v1.yaml',
@@ -31,11 +33,8 @@ def create_app():
         validate_responses=True
     )
 
-    models.init_db(config.DATABASE_DRIVE, config.DATABASE_CREDENTIALS)
-    if config.ENVIRONMENT == 'production':
-        def shutdown_session(exception):
-            models.session.remove()
-        application.app.teardown_appcontext(shutdown_session)
-    CORS(application.app)
+    @application.app.teardown_appcontext
+    def shutdown_session(exception):
+        models.session.remove()
 
     return application

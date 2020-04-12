@@ -54,7 +54,11 @@ def get_tasks_with_filters(filters, page=1, per_page=10):
         )
     if 'status' in filters:
         query = query.filter(
-            models.Task.status == filters.status
+            models.Task.status == filters['status']
+        )
+    if 'created_by' in filters:
+        query = query.filter(
+            models.Task.created_by == filters['created_by']
         )
 
     total_item = query.count()

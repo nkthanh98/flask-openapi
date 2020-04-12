@@ -7,12 +7,9 @@ from sqlalchemy.orm import (
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.url import URL
-from app import config
 
-session = None
 
 Base = declarative_base()        # pylint: disable=C0103
-
 session = scoped_session(sessionmaker(      #pylint: disable=C0103
     autocommit=False,
     autoflush=False

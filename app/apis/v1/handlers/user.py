@@ -5,44 +5,44 @@ from connexion import (
     NoContent
 )
 from werkzeug.exceptions import BadRequest
-from app import auth
-from app import utils
-from app import repos
+from app import (
+    utils,
+    services,
+)
 from ..schemas import user as user_schema
 
 
 def get_user_info(user):
-    user = repos.get_user_by_username(user)
+    user = services.get_user_info(user)
     return utils.dump(user_schema.User, user)
 
 
 def create_user():
-    data = request.get_json()
-    existed = repos.get_user_by_username(data['username'])
-    if existed:
-        raise BadRequest('User existed')
-    new_user = repos.create_user(**data)
-    return {
-        'id': new_user.id
-    }, 201
+    try:
+        data = request.get_json()
+        new_user = services.create_user(data)
+    except ValueError as error:
+        raise BadRequest(str(error)) from error
+    else:
+        return {
+            'id': new_user.id
+        }, 201
 
 
 def login():
-    data = request.get_json()
-    user = repos.get_user_by_username(data['username'])
-    if not user:
-        raise BadRequest('username or password is wrong')
-    if not user.verify_password(data['password']):
-        raise BadRequest('username or password is wrong')
-    repos.update_user(user, {'is_active': True})
-    access_token = auth.generate_access_token(user.username)
-    return {
-        'access_token': access_token,
-        'refresh_token': ''
-    }
+    try:
+        data = request.get_json()
+        session_info = services.create_session(data['username'], data['password'])
+    except ValueError as error:
+        raise BadRequest(str(error)) from error
+    else:
+        return session_info
 
 
 def logout(user):
-    user = repos.get_user_by_username(user)
-    repos.update_user(user, {'is_active': False})
-    return NoContent
+    try:
+        services.end_session(user)
+    except ValueError as error:
+        raise BadRequest(str(error)) from error
+    else:
+        return NoContent
