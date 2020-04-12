@@ -7,15 +7,15 @@ from app import (
 )
 
 
-def test_encode_and_decode_token(client):
+def test_encode_and_decode_token(db):
     user = models.User(
         fullname=faker.name(),
         username=faker.name(),
         password=faker.text(16)
     )
     user.is_active = True
-    models.session.add(user)
-    models.session.commit()
+    db.add(user)
+    db.commit()
     access_token = auth.generate_access_token(user.username)
 
     data_decoded = auth.decode_token(access_token)
