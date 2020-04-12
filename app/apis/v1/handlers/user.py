@@ -1,6 +1,5 @@
 # coding=utf-8
 
-import six
 from connexion import (
     request,
     NoContent
