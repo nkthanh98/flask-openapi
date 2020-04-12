@@ -1,11 +1,11 @@
 #coding=utf-8
 
 import unittest
+import pytest
 from faker import (
     Factory,
     Faker,
 )
-from app import create_app
 
 
 faker = Factory.create()
@@ -15,10 +15,9 @@ class BaseTestCase(unittest.TestCase):
     KEY: str = None
 
 
+@pytest.mark.usefixtures('app_class')
 class APITestCase(BaseTestCase):
-    def setUp(self):
-        self._app = create_app()
-        self._client = self._app.app.test_client()
+    app = None
 
     @staticmethod
     def url():
@@ -32,7 +31,7 @@ class APITestCase(BaseTestCase):
         method = (method or self.method()).lower()
         url = url or self.url()
         assert method in ('get', 'put', 'patch', 'post', 'delete'), f'{method} not support'
-        caller = getattr(self._client, method)
+        caller = getattr(self.app.test_client(), method)
         if method == 'get':
             resp = caller(url, headers=headers)
         else:
