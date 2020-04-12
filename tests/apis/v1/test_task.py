@@ -95,7 +95,7 @@ def test_get_task_owned_by_other_user(client):
     models.session.commit()
     url = f'/v1/tasks/{task.id}'
     res = client.get(url, headers={'Authorization': f'Bearer {access_token}'})
-    assert res.status_code == 403
+    assert res.status_code == 404
 
 
 def test_update_task_not_found(client):
@@ -145,7 +145,7 @@ def test_update_task_owned_by_other_user(client):
         json={'title': faker.name()},
         headers={'Authorization': f'Bearer {access_token}'}
     )
-    assert res.status_code == 403
+    assert res.status_code == 404
 
 
 def test_delete_task_not_found(client):
@@ -193,7 +193,7 @@ def test_delete_task_owned_by_other_user(client):
         url,
         headers={'Authorization': f'Bearer {access_token}'}
     )
-    assert res.status_code == 403
+    assert res.status_code == 404
 
 
 def test_get_tasks(client):
