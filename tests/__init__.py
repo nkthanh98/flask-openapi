@@ -17,6 +17,7 @@ class BaseTestCase(unittest.TestCase):
 
 
 @pytest.mark.usefixtures('client')
+@pytest.mark.usefixtures('slack_mock')
 class APITestCase(BaseTestCase):
     client: FlaskClient = None
 

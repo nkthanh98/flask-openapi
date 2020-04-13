@@ -3,6 +3,8 @@
 import os
 
 
+ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
+
 JWT_ALGORITHM = 'HS256'
 
 JWT_KEY = os.getenv('JWT_KEY', 'secret')
@@ -19,5 +21,10 @@ DATABASE_CREDENTIALS = {
     'database': os.getenv('DB_NAME', ':memory:')
 }
 
+LOG_FILE = os.getenv('LOG_FILE', '/tmp/app')
+
+SLACK_BOT_TOKEN = os.getenv('SLACK_BOT_TOKEN', '')
+
+SLACK_LOG_CHANNEL_ID = os.getenv('SLACK_LOG_CHANNEL_ID', '')
 
 ISSUE_MAINTAINER = os.getenv('ISSUE_MAINTAINER', 'nkthanh.uet@gmail.com')

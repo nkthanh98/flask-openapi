@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from unittest.mock import patch
 import pytest
 from app import models
 
@@ -13,3 +14,9 @@ def db():
         }
     )
     yield models.session
+
+
+@pytest.fixture
+def slack_mock():
+    with patch('app.jobs.send_message_to_slack_channel.delay') as mock:
+        yield mock

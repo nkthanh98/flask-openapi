@@ -20,7 +20,7 @@ def init_db(drive, credentials):
     engine = create_engine(         # pylint: disable=C0103
         URL(drive, **credentials),
         convert_unicode=True,
-        echo=True
+        echo=False
     )
     session.configure(bind=engine)
     Base.metadata.create_all(bind=engine)

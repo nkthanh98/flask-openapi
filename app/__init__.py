@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import os
 from connexion import (
     FlaskApp,
     Resolver,
@@ -11,6 +12,7 @@ from . import utils
 from . import repos
 from . import services
 from . import jobs
+from . import loggers
 
 
 class VersionResolver(Resolver):
