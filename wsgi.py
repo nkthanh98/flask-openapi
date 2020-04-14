@@ -2,13 +2,13 @@
 
 from app import (
     config,
-    create_app,
     models,
     loggers,
+    apis,
 )
 
 
-application = create_app()
+application = apis.create_wsgi()
 
 models.init(config.DATABASE_DRIVE, config.DATABASE_CREDENTIALS)
 

@@ -10,9 +10,9 @@ services:
       - DB_PASS=password
       - DB_NAME=app
       - DB_DRIVE=mysql+pymysql
-      - SLACK_BOT_TOKEN=xoxb-1064441476484-1057682739635-u0ChwScVjICo4zuq7FKZdjlQ
-      - SLACK_LOG_CHANNEL_ID=C011WCZE3EG
       - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
+      - SLACK_BOT_TOKEN=<bot-token>
+      - SLACK_LOG_CHANNEL_ID=<channel-id>
     ports:
       - 8000:80
     depends_on:

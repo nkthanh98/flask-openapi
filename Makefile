@@ -1,11 +1,19 @@
-lint:
-	PYTHONPATH=. python linter.py --fail_under 9.5 app
-
 test:
-	pytest
+	docker build . -t flask-app-unittest -f unit-test.dockerfile
+	docker run -it --rm flask-app-unittest
+
+build:
+	docker-compose build
 
 serve:
-	gunicorn wsgi:application --bind "0.0.0.0:5000" --worker-class gevent
+	docker-compose up -d
+
+start:
+	docker-compose build
+	docker-compose up -d
+
+stop:
+	docker-compose stop
 
 clean:
-	@rm -rf coverage.xml .coverage htmlcov
+	docker rmi flask-app-unittest
