@@ -10,8 +10,8 @@ exit_code = 0
 cmd_line_args = sys.argv[1:]
 
 if cmd_line_args:
-    if "--fail_under" in cmd_line_args:
-        fail_under_index = cmd_line_args.index("--fail_under")
+    if "--fail-under" in cmd_line_args:
+        fail_under_index = cmd_line_args.index("--fail-under")
         fail_under_value = float(cmd_line_args[fail_under_index + 1])
         del cmd_line_args[fail_under_index:fail_under_index + 2]
     else:
