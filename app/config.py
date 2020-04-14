@@ -7,6 +7,8 @@ ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 JWT_ALGORITHM = 'HS256'
 
+ENV = os.getenv('ENV', 'dev')
+
 JWT_KEY = os.getenv('JWT_KEY', 'secret')
 
 LOGIN_TIME_ALIVE = int(os.getenv('LOGIN_TIME_ALIVE', str(60 * 60 * 24)))      # 1 day

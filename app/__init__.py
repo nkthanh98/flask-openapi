@@ -25,7 +25,12 @@ class VersionResolver(Resolver):
 
 
 def create_app():
-    application = FlaskApp(__name__, specification_dir='specs')
+    options = {
+        'swagger_ui': True
+    }
+    if config.ENV == 'prod':
+        options['swagger_ui'] = False
+    application = FlaskApp(__name__, specification_dir='specs', options=options)
     CORS(application.app)
 
     application.add_api(

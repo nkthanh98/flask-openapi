@@ -10,14 +10,12 @@ services:
       - DB_PASS=password
       - DB_NAME=app
       - DB_DRIVE=mysql+pymysql
-      - SLACK_BOT_TOKEN=xoxb-1064441476484-1057682739635-q1JmmBs1BVoevwc5TnqC31DB
+      - SLACK_BOT_TOKEN=xoxb-1064441476484-1057682739635-u0ChwScVjICo4zuq7FKZdjlQ
       - SLACK_LOG_CHANNEL_ID=C011WCZE3EG
       - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
-      - CELERY_RESULT_BACKEND=mongodb://root:password@mongodb:27017/celery
     ports:
       - 8000:80
     depends_on:
-      - mongodb
       - mysql
       - rabbitmq
     networks:
@@ -32,14 +30,24 @@ services:
       - DB_PASS=password
       - DB_NAME=app
       - DB_DRIVE=mysql+pymysql
-      - SLACK_BOT_TOKEN=xoxb-1064441476484-1057682739635-q1JmmBs1BVoevwc5TnqC31DB
-      - SLACK_LOG_CHANNEL_ID=C011WCZE3EG
       - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
-      - CELERY_RESULT_BACKEND=mongodb://root:password@mongodb:27017/celery
+      - CELERY_RESULT_PERSISTENT=1
     depends_on:
-      - mongodb
       - rabbitmq
       - mysql
+    networks:
+      - mynet
+  flower:
+    build:
+      context: .
+      dockerfile: flower-prod.dockerfile
+    environment:
+      - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
+      - BROKER_API=http://root:password@rabbitmq:15672/api/
+    ports:
+      - 5555:5555
+    depends_on:
+      - rabbitmq
     networks:
       - mynet
   mysql:
@@ -54,23 +62,16 @@ services:
     networks:
       - mynet
   rabbitmq:
-    image: rabbitmq:alpine
+    image: rabbitmq:management-alpine
     environment:
       - RABBITMQ_DEFAULT_USER=root
       - RABBITMQ_DEFAULT_PASS=password
       - RABBITMQ_DEFAULT_VHOST=celery
     expose:
       - 5672
-    networks:
-      - mynet
-  mongodb:
-    image: mongo:latest
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
-      - MONGO_INITDB_DATABASE=celery
-    expose:
-      - 27017
+      - 15672
+    ports:
+      - 15672:15672
     networks:
       - mynet
 networks:
