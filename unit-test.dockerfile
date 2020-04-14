@@ -12,6 +12,6 @@ RUN pip install --no-cache-dir -r requirements-test.txt
 
 COPY . ./
 
-ENTRYPOINT pytest && PYTHONPATH=$(pwd) python linter.py --fail-under 9.5 app
+ENTRYPOINT python -m pytest && PYTHONPATH=$(pwd) python linter.py --fail-under 9.5 app
 
 CMD /bin/sh
