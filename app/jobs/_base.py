@@ -1,6 +1,5 @@
-#coding=utf-8
+# coding=utf-8
 
 from celery import Celery
 
-
-manager = Celery()
+manager = Celery('app')

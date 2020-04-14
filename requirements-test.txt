@@ -1,4 +1,3 @@
 -r ./requirements.txt
 pytest-cov==2.8.1
-pylint-fail-under
 Faker==4.0.2

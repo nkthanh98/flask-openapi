@@ -1,7 +1,14 @@
 # Ignore everything
 
-**
-
-!./app/**
-!./wsgi.py
-!./requirements.txt
+git
+venv
+LICENSE
+Procfile
+Makefile
+README.md
+coverage.xml
+.coverage
+.codecov.yml
+.circleci
+**/*.dockerfile
+**/*.docker-compose.yml

@@ -6,7 +6,7 @@ from app import models
 
 @pytest.fixture
 def db():
-    models.init_db(
+    models.init(
         drive='sqlite',
         credentials={
             'database': ':memory:'

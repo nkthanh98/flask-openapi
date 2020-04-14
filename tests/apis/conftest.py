@@ -10,13 +10,13 @@ from app import (
 @pytest.fixture
 def client(request):
     _app = create_app()
-    models.init_db(
+    models.init(
         drive='sqlite',
         credentials={
             'database': ':memory:'
         }
     )
-    with _app.app.test_client() as client:
+    with _app.app.test_client() as _client:
         if request.cls is not None:
-            request.cls.client = client
-        yield client
+            request.cls.client = _client
+        yield _client

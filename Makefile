@@ -1,5 +1,5 @@
 lint:
-	PYTHONPATH=. pylint-fail-under --fail_under 9.5 app
+	PYTHONPATH=. python linter.py --fail_under 9.5 app
 
 test:
 	pytest

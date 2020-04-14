@@ -1,6 +1,5 @@
 # coding=utf-8
 
-import six
 from sqlalchemy import exc
 from app import models
 
@@ -16,10 +15,7 @@ def create_task(title, created_by, description=None, status='new'):
         models.session.add(new_task)
         models.session.commit()
     except exc.IntegrityError as db_error:
-        raise six.raise_from(
-            value=ValueError(f'User {created_by} not exist'),
-            from_value=db_error
-        )
+        raise ValueError(f'User {created_by} not exist') from db_error
     else:
         return new_task
 

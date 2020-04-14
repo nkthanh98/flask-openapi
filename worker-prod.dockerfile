@@ -10,10 +10,10 @@ ADD requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ADD . .
+ADD app ./app
 
-EXPOSE 80
+ADD logging.ini ./
 
-ENTRYPOINT gunicorn wsgi:application --bind "0.0.0.0:80" --worker-class gevent
+ENTRYPOINT celery -A app.jobs.manager worker -l info
 
 CMD /bin/sh
