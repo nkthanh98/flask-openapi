@@ -1,6 +1,6 @@
 test:
 	docker build . -t flask-app-unittest -f unittest.dockerfile
-	docker run -it --rm -e CODECOV_TOKEN=${CODECOV_TOKEN} flask-app-unittest
+	docker run -it --rm -e ci_env=${ci_env} flask-app-unittest
 
 build:
 	docker-compose build

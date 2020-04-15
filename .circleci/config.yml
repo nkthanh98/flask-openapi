@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: make test
+          command: make test ci_env=`bash <(curl -s https://codecov.io/env)`
           name: Run test
       # - run:
       #     command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
