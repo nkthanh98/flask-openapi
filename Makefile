@@ -1,5 +1,5 @@
 test:
-	docker build . -t flask-app-unittest -f unit-test.dockerfile
+	docker build . -t flask-app-unittest -f unittest.dockerfile
 	docker run -it --rm flask-app-unittest
 
 build:
@@ -17,3 +17,4 @@ stop:
 
 clean:
 	docker rmi flask-app-unittest
+	docker-compose rm

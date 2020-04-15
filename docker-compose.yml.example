@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: web-prod.dockerfile
+      dockerfile: web.dockerfile
     environment:
       - DB_HOST=mysql
       - DB_USER=root
@@ -23,7 +23,7 @@ services:
   worker:
     build:
       context: .
-      dockerfile: worker-prod.dockerfile
+      dockerfile: worker.dockerfile
     environment:
       - DB_HOST=mysql
       - DB_USER=root
@@ -40,7 +40,7 @@ services:
   flower:
     build:
       context: .
-      dockerfile: flower-prod.dockerfile
+      dockerfile: flower.dockerfile
     environment:
       - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
       - BROKER_API=http://root:password@rabbitmq:15672/api/
