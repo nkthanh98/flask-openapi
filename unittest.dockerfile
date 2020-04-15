@@ -4,7 +4,7 @@ MAINTAINER nguyenkhacthanh244@gmail.com
 
 WORKDIR /app
 
-RUN apk update && apk add --no-cache gcc musl-dev libffi-dev openssl-dev
+RUN apk update && apk add --no-cache gcc musl-dev libffi-dev openssl-dev curl
 
 COPY requirements.txt requirements-test.txt ./
 
@@ -12,6 +12,8 @@ RUN pip install --no-cache-dir -r requirements-test.txt
 
 COPY . ./
 
-ENTRYPOINT python -m pytest && PYTHONPATH=$(pwd) python linter.py --fail-under 9.5 app
+ENTRYPOINT python -m pytest &&\
+           PYTHONPATH=$(pwd) python linter.py --fail-under 9.5 app &&\
+           if [ "$CODECOV_TOKEN" ]; then sh -c <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN; fi;
 
 CMD /bin/sh
