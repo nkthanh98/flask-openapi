@@ -14,6 +14,6 @@ COPY . ./
 
 ENTRYPOINT python -m pytest &&\
            PYTHONPATH=$(pwd) python linter.py --fail-under 9.5 app &&\
-           if [ "$ci_env" ]; then bash -c "bash <(curl -s https://codecov.io/bash)"; fi;
+           bash -c "bash <(curl -s https://codecov.io/bash)"
 
 CMD /bin/sh
