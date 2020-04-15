@@ -2,12 +2,12 @@ version: 2.1
 
 jobs:
   test:
+    machine: true
     steps:
       - checkout
-      - set_remote_docker:
-          docker_layer_caching: true
       - run:
           command: make test
+          name: Run test
       # - run:
       #     command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
       #     name: Upload codecove report
