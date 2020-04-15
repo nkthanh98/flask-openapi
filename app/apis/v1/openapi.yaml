@@ -387,4 +387,4 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      x-bearerInfoFunc: app.auth.auth_fn
+      x-bearerInfoFunc: app.services.auth.auth_fn

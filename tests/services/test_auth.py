@@ -1,10 +1,8 @@
 # coding=utf-8
 
 from tests import faker
-from app import (
-    auth,
-    models,
-)
+from app import models
+from app.services import auth
 
 
 def test_encode_and_decode_token(db):

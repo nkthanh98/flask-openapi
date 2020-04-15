@@ -1,7 +1,6 @@
 # coding=utf-8
 
 from app import (
-    config,
     models,
     loggers,
     apis,
@@ -10,6 +9,6 @@ from app import (
 
 application = apis.create_wsgi()
 
-models.init(config.DATABASE_DRIVE, config.DATABASE_CREDENTIALS)
+models.init(apis.config.DATABASE_DRIVE, apis.config.DATABASE_CREDENTIALS)
 
-loggers.init('logging.ini', config.SLACK_BOT_TOKEN, config.SLACK_LOG_CHANNEL_ID)
+loggers.init('logging.ini', apis.config.SLACK_BOT_TOKEN, apis.config.SLACK_LOG_CHANNEL_ID)
