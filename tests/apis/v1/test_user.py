@@ -1,10 +1,8 @@
 # coding=utf-8
 
 from unittest.mock import patch
-from app import (
-    models,
-    auth,
-)
+from app import models
+from app.services import auth
 from tests import (
     faker,
     APITestCase,

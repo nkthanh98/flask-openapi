@@ -1,9 +1,7 @@
 #coding=utf-8
 
-from app import (
-    repos,
-    auth,
-)
+from app import repos
+from . import auth
 
 def get_user_info(username):
     return repos.get_user_by_username(username)

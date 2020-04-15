@@ -6,10 +6,8 @@ from connexion import (
     FlaskApp,
     Resolver,
 )
-from app import (
-    config,
-    models,
-)
+from app import models
+from . import config
 
 
 class VersionResolver(Resolver):
@@ -27,11 +25,12 @@ def create_wsgi():
     }
     if config.ENV == 'prod':
         options['swagger_ui'] = False
-    application = FlaskApp(__name__, specification_dir='specs', options=options)
+    application = FlaskApp(__name__, options=options)
+    application.app.config.from_object(config)
     CORS(application.app)
 
     application.add_api(
-        specification='openapi-v1.yaml',
+        specification='v1/openapi.yaml',
         resolver=VersionResolver('app.apis.v1.handlers'),
         strict_validation=True,
         validate_responses=True
