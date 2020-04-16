@@ -4,9 +4,15 @@ test:
 lint:
 	PYTHONPATH=. python linter.py --fail-under 9.5 app
 
-start:
+build:
 	docker-compose build
+
+run:
 	docker-compose up -d
+
+start:
+	make build
+	make run
 
 stop:
 	docker-compose stop

@@ -31,8 +31,26 @@ jobs:
       - run:
           command: make lint
           name: Linting
+  deploy:
+    machine: true
+    steps:
+      - run:
+          name: Build and push image
+          command: |
+            docker build . -t $DOCKER_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+            docker push $DOCKER_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
 workflows:
+  version: 2
   main:
     jobs:
       - test
       - lint
+      - deploy:
+          requires:
+            - test
+            - lint
+          filters:
+            branches:
+              only:
+                - master
