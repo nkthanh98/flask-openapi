@@ -11,4 +11,10 @@ coverage.xml
 .codecov.yml
 .circleci
 **/*.dockerfile
-**/*.docker-compose.yml
+docker-compose.yml
+docker-compose.yml.example
+tests
+requirements-test.txt
+pylintplugins.py
+pytest.ini
+linter.py
