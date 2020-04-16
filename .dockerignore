@@ -1,6 +1,6 @@
 # Ignore everything
 
-git
+.git
 venv
 LICENSE
 Procfile
@@ -10,7 +10,7 @@ coverage.xml
 .coverage
 .codecov.yml
 .circleci
-**/*.dockerfile
+Dockerfile
 docker-compose.yml
 docker-compose.yml.example
 tests

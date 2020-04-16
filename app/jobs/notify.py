@@ -22,6 +22,7 @@ def send_message_to_slack_channel(token, channel_id, message):
     resp = requests.post(
         url=url,
         json=body,
-        headers=headers
+        headers=headers,
+        timeout=60
     )
     return resp.json()
