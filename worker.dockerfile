@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.7-alpine AS compile-image
 
 LABEL maintainer="nguyenkhacthanh244@gmail.com" version="1.0"
 
@@ -9,10 +9,19 @@ RUN apk update --no-cache &&\
 
 ADD requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -mvenv env &&\
+    source env/bin/activate &&\
+    pip install --no-cache-dir -r requirements.txt
+
+FROM python:3.7-alpine AS runtime-image
+
+WORKDIR /app
+
+COPY --from=compile-image /app/env ./env
 
 ADD . .
 
-ENTRYPOINT celery -A app.jobs.manager worker -l info
+ENTRYPOINT source env/bin/activate &&\
+           celery -A app.jobs.manager worker -l info
 
 CMD /bin/sh
