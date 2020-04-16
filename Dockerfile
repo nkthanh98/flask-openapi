@@ -21,7 +21,6 @@ COPY --from=compile-image /app/env ./env
 
 ADD . .
 
-ENTRYPOINT source env/bin/activate &&\
-           celery -A app.jobs.manager worker -l info
+EXPOSE 80 5555
 
 CMD /bin/sh

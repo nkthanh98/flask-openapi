@@ -1,9 +1,8 @@
 version: "3.7"
+
 services:
   web:
-    build:
-      context: .
-      dockerfile: web.dockerfile
+    image: nguyenkhacthanh/flask-webservice:latest
     environment:
       - DB_HOST=mysql
       - DB_USER=root
@@ -11,19 +10,19 @@ services:
       - DB_NAME=app
       - DB_DRIVE=mysql+pymysql
       - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
-      - SLACK_BOT_TOKEN=<bot-token>
-      - SLACK_LOG_CHANNEL_ID=<channel-id>
+      - SLACK_BOT_TOKEN=<slack-bot-token>
+      - SLACK_LOG_CHANNEL_ID=<slac-channel-id>
     ports:
       - 8000:80
+    restart: always
+    command: ./run.sh alembic upgrade head && gunicorn -c gunicorn.config.py wsgi:application
     depends_on:
       - mysql
       - rabbitmq
     networks:
       - mynet
   worker:
-    build:
-      context: .
-      dockerfile: worker.dockerfile
+    image: nguyenkhacthanh/flask-webservice:latest
     environment:
       - DB_HOST=mysql
       - DB_USER=root
@@ -35,19 +34,21 @@ services:
     depends_on:
       - rabbitmq
       - mysql
+    command: ./run.sh celery -A app.jobs.manager worker -l info
+    restart: always
     networks:
       - mynet
   flower:
-    build:
-      context: .
-      dockerfile: flower.dockerfile
+    image: nguyenkhacthanh/flask-webservice:latest
     environment:
       - CELERY_BROKER_URL=amqp://root:password@rabbitmq:5672/celery
       - BROKER_API=http://root:password@rabbitmq:15672/api/
     ports:
       - 5555:5555
+    command: ./run.sh celery -A app.jobs.manager flower --address=0.0.0.0 --port=5555 --broker_api=$${BROKER_API}
     depends_on:
       - rabbitmq
+    restart: always
     networks:
       - mynet
   mysql:
