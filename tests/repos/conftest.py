@@ -12,4 +12,5 @@ def db():
             'database': ':memory:'
         }
     )
+    models.Base.metadata.create_all(bind=models.session.get_bind())
     yield models.session

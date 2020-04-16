@@ -16,6 +16,7 @@ def client(request):
             'database': ':memory:'
         }
     )
+    models.Base.metadata.create_all(bind=models.session.get_bind())
     with _wsgi.app.test_client() as _client:
         if request.cls is not None:
             request.cls.client = _client
