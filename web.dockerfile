@@ -1,21 +1,21 @@
 FROM python:3.7-alpine
 
-MAINTAINER nguyenkhacthanh244@gmail.com
+LABEL maintainer="nguyenkhacthanh244@gmail.com" version="1.0"
 
 WORKDIR /app
 
-RUN apk update && apk add --no-cache gcc musl-dev libffi-dev openssl-dev
+RUN apk update --no-cache &&\
+    apk add --no-cache gcc musl-dev libffi-dev openssl-dev
 
 ADD requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ADD app ./app
-
-ADD wsgi.py logging.ini ./
+ADD . .
 
 EXPOSE 80
 
-ENTRYPOINT gunicorn wsgi:application --bind "0.0.0.0:80" --worker-class gevent
+ENTRYPOINT alembic upgrade head &&\
+           gunicorn wsgi:application -c gunicorn.config.py
 
 CMD /bin/sh
