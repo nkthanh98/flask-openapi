@@ -32,7 +32,7 @@ jobs:
           command: make lint
           name: Linting
   deploy:
-    executor: machine
+    machine: true
     steps:
       - run:
           name: Build and push image
