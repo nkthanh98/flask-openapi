@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/nkthanh98/flask-webservice.svg?style=svg)](https://circleci.com/gh/nkthanh98/flask-webservice)
+[![CircleCI](https://circleci.com/gh/nkthanh98/flask-webservice.svg?style=shield)](https://circleci.com/gh/nkthanh98/flask-webservice)
 [![codecov](https://codecov.io/gh/nkthanh98/flask-webservice/branch/master/graph/badge.svg)](https://codecov.io/gh/nkthanh98/flask-webservice)
 
 # flask-webservice
