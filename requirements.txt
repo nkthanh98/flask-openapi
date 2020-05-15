@@ -10,3 +10,4 @@ flask-cors==3.0.8
 celery==4.4.2
 requests==2.23.0
 flower==0.9.4
+pika==1.1.0
