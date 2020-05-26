@@ -1,8 +1,13 @@
 # coding=utf-8
 
+import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
+from app import configs
 from ._base import manager
-from . import _config
-from .notify import send_message_to_slack_channel
 
 
-manager.config_from_object(_config)
+manager.config_from_object(configs.celery)
+sentry_sdk.init(
+    dsn='',
+    integrations=[CeleryIntegration()]
+)
