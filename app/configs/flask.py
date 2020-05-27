@@ -1,19 +1,28 @@
 # coding=utf-8
 
-from app.configs import Config as BaseConfig
+from app import configs
+
+
+class BaseConfig(configs.Config):
+    pass
 
 
 class DevelopmentConfig(BaseConfig):
+   __name__ = 'development'
+
    TESTING = False
    DEBUG = True
 
 
 class TestingConfig(BaseConfig):
+    __name__ = 'testing'
     TESTING = True
     DEBUG = False
 
 
 class ProductionConfig(BaseConfig):
+   __name__ = 'production'
+
    TESTING = False
    DEBUG = False
 

@@ -1,22 +1,20 @@
-#coding=utf-8
+# coding=utf-8
 
 import os
 from app import configs
 
 
-class BaseConfig(configs.Config):
-    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
-
-
-class DevelopmentConfig(BaseConfig):
+class DevelopmentConfig(configs.Config):
     __name__ = 'development'
 
+    DSN = os.getenv('SENTRY_DNS')
 
-class TestingConfig(BaseConfig):
+
+class TestingConfig(configs.Config):
     __name__ = 'testing'
 
 
-class ProductionConfig(BaseConfig):
+class ProductionConfig(configs.Config):
     __name__ = 'production'
 
 

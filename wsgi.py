@@ -1,12 +1,14 @@
 # coding=utf-8
 
+import os
 from app import (
     models,
     apis,
-    configs,
+    sentry,
 )
 
 
-application = apis.create_wsgi()
-
-models.config_from_object(configs.sqlalchemy)
+ENV = os.getenv('ENV', 'production')
+application = apis.create_wsgi(ENV)
+models.load_config(ENV)
+sentry.load_and_start(ENV)

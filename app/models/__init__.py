@@ -3,7 +3,8 @@
 from ._base import (
     Base,
     session,
-    config_from_object,
+    load_config,
+    load_config_from_object,
 )
 from .task import Task
 from .user import User
