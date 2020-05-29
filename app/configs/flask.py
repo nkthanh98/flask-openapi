@@ -8,10 +8,10 @@ class BaseConfig(configs.Config):
 
 
 class DevelopmentConfig(BaseConfig):
-   __name__ = 'development'
+    __name__ = 'development'
 
-   TESTING = False
-   DEBUG = True
+    TESTING = False
+    DEBUG = True
 
 
 class TestingConfig(BaseConfig):
@@ -21,10 +21,10 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-   __name__ = 'production'
+    __name__ = 'production'
 
-   TESTING = False
-   DEBUG = False
+    TESTING = False
+    DEBUG = False
 
 
 def get_config(config_name):

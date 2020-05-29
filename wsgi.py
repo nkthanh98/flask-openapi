@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import os
+import logging.config
 from app import (
     models,
     apis,
@@ -8,6 +9,7 @@ from app import (
 )
 
 
+logging.config.fileConfig('logging.ini')
 ENV = os.getenv('ENV', 'production')
 application = apis.create_wsgi(ENV)
 models.load_config(ENV)
