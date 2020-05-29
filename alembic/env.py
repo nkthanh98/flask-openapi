@@ -13,7 +13,7 @@ from app import (
     apis,
     models,
 )
-models.init(apis.config.DATABASE_DRIVE, apis.config.DATABASE_CREDENTIALS)
+models.load_config(os.getenv('ENV'))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
