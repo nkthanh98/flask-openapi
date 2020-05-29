@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 """Security module
 """
 
@@ -57,4 +57,4 @@ def generate_access_token(identifier):        # pylint: disable=C0116
     )
 
 
-auth_fn = partial(decode_token, callback=set_current_user)
+auth_fn = partial(decode_token, callback=set_current_user)  # pylint: disable=C0103

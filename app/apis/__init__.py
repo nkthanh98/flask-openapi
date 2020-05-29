@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 
 import os
 from flask_cors import CORS
@@ -6,8 +6,10 @@ from connexion import (
     FlaskApp,
     Resolver,
 )
-from app import models
-from . import config
+from app import (
+    models,
+    configs,
+)
 
 
 class VersionResolver(Resolver):
@@ -19,13 +21,9 @@ class VersionResolver(Resolver):
         return f'{self._prefix}.{operation.operation_id}'
 
 
-def create_wsgi():
-    options = {
-        'swagger_ui': True
-    }
-    if config.ENV == 'prod':
-        options['swagger_ui'] = False
-    application = FlaskApp(__name__, options=options)
+def create_wsgi(config_name=None):
+    application = FlaskApp(__name__)
+    config = configs.flask.get_config(config_name)
     application.app.config.from_object(config)
     CORS(application.app)
 
