@@ -8,17 +8,8 @@ coverage:
         target: 80%
         threshold: 0%
         base: pr
-        branches:
-          - master
         if_not_found: success
         if_ci_failed: error
         informational: false
         only_pulls: false
-    patch:
-      default:
-        target: 80%
-        threshold: 0%
-        if_not_found: success
-        if_ci_failed: error
-        informational: false
-        only_pulls: false
+    patch: off
