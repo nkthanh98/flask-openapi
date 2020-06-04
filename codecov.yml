@@ -6,7 +6,7 @@ coverage:
     project:
       default:
         target: 80
-        threshold: null
+        threshold: 80
         base: auto
         branches: null
         if_no_uploads: error
