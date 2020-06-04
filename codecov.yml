@@ -1,17 +1,15 @@
 codecov:
   require_ci_to_pass: yes
-
 coverage:
+  range: "80..100"
   status:
     project:
       default:
-        target: 80
-        threshold: null
-        base: auto
-        branches: null
-        if_no_uploads: error
+        target: 80%
+        threshold: 0%
+        base: pr
         if_not_found: success
         if_ci_failed: error
+        informational: false
         only_pulls: false
-        flags: null
-        paths: null
+    patch: off
