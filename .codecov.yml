@@ -1,8 +1,5 @@
 codecov:
-  require_ci_to_pass: yes
-
-ignore:
-  - "./app/models/_base.py"
+  require_ci_to_pass: no
 
 coverage:
   status:
