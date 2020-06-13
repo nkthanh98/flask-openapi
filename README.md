@@ -1,4 +1,4 @@
-[![GithubCI](https://github.com/magiskboy/flask-webservice/workflows/Test/badge.svg)](https://github.com/magiskboy/flask-webservice/actions?query=workflow%3ACI)
+[![GithubCI](https://github.com/magiskboy/flask-webservice/workflows/ci/badge.svg)](https://github.com/magiskboy/flask-webservice/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/magiskboy/flask-webservice/branch/master/graph/badge.svg)](https://codecov.io/gh/magiskboy/flask-webservice)
 
 
