@@ -47,6 +47,7 @@ jobs:
       - test
     if: ${{ github.ref == 'refs/heads/master' }}
     steps:
+      - uses: actions/checkout@v2
       - name: Build and push to docker hub
         uses: docker/build-push-action@v1
         with:
