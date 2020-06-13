@@ -1,6 +1,8 @@
 # coding=utf-8
 
 import os
+from sentry_sdk import init as sentry_init
+from sentry_sdk.integrations import flask as sentry_flask
 from flask_cors import CORS
 from connexion import (
     FlaskApp,
@@ -8,7 +10,7 @@ from connexion import (
 )
 from app import (
     models,
-    configs,
+    settings,
 )
 
 
@@ -21,15 +23,17 @@ class VersionResolver(Resolver):
         return f'{self._prefix}.{operation.operation_id}'
 
 
-def create_wsgi(config_name=None):
+def create_wsgi():
     application = FlaskApp(__name__)
-    config = configs.flask.get_config(config_name)
+    config = settings.load_config(
+        (settings.FlaskSettings, settings.SentrySetting,)
+    )
     application.app.config.from_object(config)
     CORS(application.app)
 
     application.add_api(
         specification='v1/openapi.yaml',
-        resolver=VersionResolver('app.apis.v1.handlers'),
+        resolver=VersionResolver('app.http.v1.handlers'),
         strict_validation=True,
         validate_responses=True
     )
@@ -37,5 +41,10 @@ def create_wsgi(config_name=None):
     @application.app.teardown_appcontext
     def shutdown_session(exception):
         models.session.remove()
+
+    sentry_init(
+        dsn=config.SENTRY_DSN,
+        integrations=[sentry_flask.FlaskIntegration()]
+    )
 
     return application

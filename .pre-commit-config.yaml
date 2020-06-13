@@ -5,6 +5,11 @@ repos:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
+-   repo: https://github.com/asottile/reorder_python_imports
+    rev: v1.4.0
+    hooks:
+    -   id: reorder-python-imports
+        args: [--py3-plus]
 -   repo: local
     hooks:
     - id: pylint
@@ -17,3 +22,5 @@ repos:
       entry: make test
       language: system
       types: [python]
+      always_run: true
+      pass_filenames: false
