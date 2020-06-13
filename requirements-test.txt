@@ -1,4 +1,0 @@
--r ./requirements.txt
-pytest-cov==2.8.1
-Faker==4.0.2
-pylint==2.4.4
