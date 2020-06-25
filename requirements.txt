@@ -12,3 +12,4 @@ requests==2.23.0
 flower==0.9.4
 blinker==1.4.0
 sentry-sdk==0.14.4
+Cython

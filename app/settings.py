@@ -2,6 +2,7 @@
 
 import os
 import inspect
+import typing as T
 
 
 class BaseSettings:
@@ -41,6 +42,6 @@ class SentrySetting(BaseSettings):
     SENTRY_DSN: str = ''
 
 
-def load_config(config_class: list, **kwargs) -> BaseSettings:
+def load_config(config_class: T.Union[list, tuple], **kwargs) -> BaseSettings:
     concrete_class = type("ConcreteSetting", config_class, {})
     return concrete_class.load(**kwargs)
